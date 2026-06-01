@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- Stem -->
+  <path fill="#2E7D32" d="M15 16c-1 5-4 12-4 12.5.5.5 1.5 1 2.5.5s7-8 7-13l-5.5 0z" filter="url(#shadow)"/>
+  <!-- Leaf 1 -->
+  <path fill="#4CAF50" d="M12 25c3-1 5-4 5-4s-4-1-6 1c-2 1-2 3-2 3s1 1 3-.5z" filter="url(#shadow)"/>
+  <!-- Leaf 2 -->
+  <path fill="#4CAF50" d="M22 20c-2 2-5 3-5 3s1-4 3-6c2-2 4-2 4-2s.5 2-2 5z" filter="url(#shadow)"/>
+  <!-- Flower Base -->
+  <path fill="#B71C1C" d="M24 10c0-5-4-8-8-8s-8 3-8 8c0 5 4 8 8 10 4-2 8-5 8-10z" filter="url(#shadow)"/>
+  <!-- Inner Petal 1 -->
+  <path fill="#E53935" d="M22 9c0-4-3-6-6-6S10 5 10 9c0 4 3 6 6 8 3-2 6-4 6-8z"/>
+  <!-- Inner Petal 2 -->
+  <path fill="#EF5350" d="M20 8c0-3-2-5-4-5s-4 2-4 5c0 3 2 5 4 6 2-1 4-3 4-6z"/>
+  <!-- Center -->
+  <path fill="#FFEB3B" d="M16 6c-1 0-2 1-2 2s1 2 2 2 2-1 2-2-1-2-2-2z"/>
+</svg>
