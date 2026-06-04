@@ -153,12 +153,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * 6. Flip Card Mobile Support
-     * Enables touch-to-flip on mobile devices
+     * 6. Flip Card Mobile Support and Interactive Marquee
+     * Enables touch-to-flip on mobile devices and makes the marquee draggable by mouse and touch
      */
+    let dragDistance = 0;
     const flipCards = document.querySelectorAll('.flip-card');
     flipCards.forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function(e) {
+            // If the user was dragging the marquee, prevent card flip
+            if (dragDistance > 8) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
             // Toggle focus to trigger the CSS hover/focus-within state
             if (document.activeElement === this) {
                 document.activeElement.blur();
@@ -167,6 +174,135 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    const marquee = document.querySelector('.tecnicas__marquee');
+    const track = document.querySelector('.tecnicas__marquee-track');
+    
+    if (marquee && track) {
+        let isDown = false;
+        let startX;
+        let scrollLeftStart;
+        let dragStartX = 0;
+        let autoScrollSpeed = 0.7; // px per frame
+        let isInteracting = false;
+        let interactionTimeout = null;
+        let animationFrameId = null;
+
+        const getHalfWidth = () => {
+            return track.scrollWidth / 2;
+        };
+
+        const startInteraction = () => {
+            isInteracting = true;
+            if (interactionTimeout) clearTimeout(interactionTimeout);
+        };
+
+        const endInteraction = () => {
+            if (interactionTimeout) clearTimeout(interactionTimeout);
+            interactionTimeout = setTimeout(() => {
+                isInteracting = false;
+            }, 2500); // Resume auto scroll after 2.5s of inactivity
+        };
+
+        // Prevent default image drag behavior
+        marquee.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+        });
+
+        // Mouse events for grabbing and dragging
+        marquee.addEventListener('mousedown', (e) => {
+            isDown = true;
+            marquee.classList.add('is-dragging');
+            startX = e.pageX - marquee.offsetLeft;
+            scrollLeftStart = marquee.scrollLeft;
+            dragStartX = e.pageX;
+            dragDistance = 0;
+            startInteraction();
+        });
+
+        marquee.addEventListener('mouseleave', () => {
+            if (isDown) {
+                isDown = false;
+                marquee.classList.remove('is-dragging');
+                endInteraction();
+            }
+        });
+
+        marquee.addEventListener('mouseup', () => {
+            if (isDown) {
+                isDown = false;
+                marquee.classList.remove('is-dragging');
+                endInteraction();
+            }
+        });
+
+        marquee.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - marquee.offsetLeft;
+            const walk = (x - startX) * 1.5; // Scroll speed multiplier
+            marquee.scrollLeft = scrollLeftStart - walk;
+            
+            dragDistance = Math.abs(e.pageX - dragStartX);
+            
+            // Infinite looping scroll during drag
+            const halfWidth = getHalfWidth();
+            if (marquee.scrollLeft >= halfWidth) {
+                marquee.scrollLeft -= halfWidth;
+                scrollLeftStart -= halfWidth;
+            } else if (marquee.scrollLeft <= 0) {
+                marquee.scrollLeft += halfWidth;
+                scrollLeftStart += halfWidth;
+            }
+        });
+
+        // Touch events for mobile swiping
+        marquee.addEventListener('touchstart', () => {
+            dragDistance = 0;
+            startInteraction();
+        }, { passive: true });
+
+        marquee.addEventListener('touchmove', () => {
+            // Register interaction during touch scroll
+            dragDistance = 9; // Mark as dragged so we don't trigger flip on tap end if they swiped
+            startInteraction();
+        }, { passive: true });
+
+        marquee.addEventListener('touchend', () => {
+            endInteraction();
+            // Reset dragDistance after touch release (needs a short delay so the click event doesn't trigger)
+            setTimeout(() => {
+                dragDistance = 0;
+            }, 50);
+        }, { passive: true });
+
+        // Auto-scroll loop
+        const step = () => {
+            if (!isDown && !isInteracting) {
+                marquee.scrollLeft += autoScrollSpeed;
+                
+                const halfWidth = getHalfWidth();
+                if (marquee.scrollLeft >= halfWidth) {
+                    marquee.scrollLeft -= halfWidth;
+                } else if (marquee.scrollLeft <= 0) {
+                    marquee.scrollLeft += halfWidth;
+                }
+            }
+            animationFrameId = requestAnimationFrame(step);
+        };
+
+        // Start auto-scroll
+        animationFrameId = requestAnimationFrame(step);
+
+        // Pause/resume when tab is backgrounded
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationFrameId);
+            } else {
+                animationFrameId = requestAnimationFrame(step);
+            }
+        });
+    }
 
     /**
      * 7. WhatsApp Helper Function
