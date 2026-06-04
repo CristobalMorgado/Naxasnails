@@ -78,10 +78,19 @@ body {
   font-family: var(--font-body);
   font-size: var(--fs-base);
   color: var(--color-text);
-  background: linear-gradient(to bottom, #FDFBF7 0%, #F6DFE7 30%, #FDFBF7 60%, #F6DFE7 100%);
+  background: linear-gradient(-45deg, #FDFBF7, #f7cddb, #FDFBF7, #f2a7bb);
+  background-size: 300% 300%;
+  background-attachment: fixed;
+  animation: gradientFlow 20s ease infinite;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 img, picture, svg {
@@ -167,6 +176,8 @@ p {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-md);
+  position: relative;
+  z-index: 1;
 }
 
 .section {
@@ -174,7 +185,7 @@ p {
 }
 
 .section--bg-alt {
-  background-color: var(--color-secondary);
+  background-color: transparent;
 }
 
 .section-header {
@@ -183,11 +194,17 @@ p {
 
 .section-title {
   font-family: var(--font-elegant);
-  color: var(--color-text);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   margin-bottom: var(--space-xs);
+  background: linear-gradient(to right, #b8860b, #ffd700, #b8860b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
 }
 
 .section-title.text-white {
+  background: none;
+  -webkit-text-fill-color: var(--color-white);
   color: var(--color-white);
 }
 
@@ -601,7 +618,7 @@ p {
 }
 
 .tecnicas {
-  background-color: var(--color-mauve);
+  background-color: transparent;
   overflow: hidden;
 }
 
@@ -715,7 +732,7 @@ p {
 
 /* Testimonios Section */
 .testimonios {
-  background-color: var(--color-bg);
+  background-color: transparent;
 }
 
 .testimonios__grid {
@@ -1363,5 +1380,85 @@ p {
   .nav__link {
     font-size: var(--fs-xl);
     font-family: var(--font-elegant);
+  }
+}
+
+/* Animación del Conejito Interactiva */
+.bunny-anim {
+  position: fixed;
+  bottom: 0;
+  right: -150px;
+  width: 140px;
+  height: 140px;
+  z-index: 0;
+  cursor: pointer;
+  animation: bunny-journey 15s infinite;
+  transform-origin: bottom center;
+}
+
+.bunny-anim:hover {
+  animation-play-state: paused;
+  z-index: 9999;
+}
+
+.bunny-anim__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+  filter: blur(1px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bunny-anim:hover .bunny-anim__img {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1.2) translateY(-10px);
+}
+
+@keyframes bunny-journey {
+  /* Entrada: Saltando de derecha a centro-derecha */
+  0% { transform: translateX(0) scaleY(1) scaleX(1); }
+  5% { transform: translateX(-15vw) translateY(-120px) scaleY(1.1) scaleX(0.9) rotate(-15deg); }
+  8% { transform: translateX(-25vw) translateY(0) scaleY(0.8) scaleX(1.15) rotate(0deg); }
+  10% { transform: translateX(-25vw) translateY(0) scaleY(1) scaleX(1); }
+
+  /* Mirando alrededor */
+  12% { transform: translateX(-25vw) translateY(0) rotate(-5deg); }
+  14% { transform: translateX(-25vw) translateY(0) rotate(5deg); }
+  16% { transform: translateX(-25vw) translateY(0) rotate(0deg); }
+
+  /* Segundo salto hacia la izquierda */
+  20% { transform: translateX(-25vw) translateY(0) scaleY(0.7) scaleX(1.2); }
+  24% { transform: translateX(-55vw) translateY(-160px) scaleY(1.1) scaleX(0.9) rotate(-20deg); }
+  28% { transform: translateX(-75vw) translateY(0) scaleY(0.7) scaleX(1.2) rotate(0deg); }
+  30% { transform: translateX(-75vw) translateY(0) scaleY(1) scaleX(1); }
+
+  /* Gira para mirar atrás y luego hacia adelante */
+  33% { transform: translateX(-75vw) translateY(0) scaleX(-1); }
+  36% { transform: translateX(-75vw) translateY(0) scaleX(1); }
+  
+  /* Último salto largo fuera de la pantalla */
+  40% { transform: translateX(-75vw) translateY(0) scaleY(0.8) scaleX(1.2); }
+  45% { transform: translateX(-120vw) translateY(-140px) scaleY(1.1) scaleX(0.9) rotate(-15deg); }
+  50% { transform: translateX(-150vw) translateY(0) scaleY(1) scaleX(1) rotate(0deg); }
+
+  /* Fuera de pantalla por el resto del tiempo */
+  100% { transform: translateX(-150vw) translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .bunny-anim { width: 90px; height: 90px; bottom: 10px; }
+  @keyframes bunny-journey {
+    0% { transform: translateX(0) scaleY(1) scaleX(1); }
+    5% { transform: translateX(-20vw) translateY(-80px) scaleY(1.1) scaleX(0.9) rotate(-10deg); }
+    8% { transform: translateX(-40vw) translateY(0) scaleY(0.8) scaleX(1.15); }
+    10% { transform: translateX(-40vw) translateY(0) scaleY(1) scaleX(1); }
+    15% { transform: translateX(-40vw) translateY(0) rotate(-5deg); }
+    20% { transform: translateX(-40vw) translateY(0) scaleY(0.8) scaleX(1.2); }
+    25% { transform: translateX(-100vw) translateY(-100px) scaleY(1.1) scaleX(0.9) rotate(-15deg); }
+    30% { transform: translateX(-150vw) translateY(0) scaleY(1) scaleX(1); }
+    100% { transform: translateX(-150vw) translateY(0); }
   }
 }
