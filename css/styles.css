@@ -10,7 +10,7 @@
    VARIABLES
    ========================================================================== */
 :root {
-  /* Colors */
+  /* Colors - Light Mode */
   --color-primary    : #F2A7BB;
   --color-secondary  : #FAF0E6;
   --color-accent     : #C9A96E;
@@ -20,6 +20,18 @@
   --color-white      : #FFFFFF;
   --color-dark       : #1A1A1A;
   --color-mauve      : #C9A0B4;
+
+  /* Theme-aware semantic tokens (default: light) */
+  --theme-bg-body    : #FDFBF7;
+  --theme-bg-alt     : #FAF0E6;
+  --theme-surface    : #FFFFFF;
+  --theme-text       : #2C2C2C;
+  --theme-text-soft  : #5A5A5A;
+  --theme-border     : #E8D5DE;
+  --theme-header-bg  : rgba(253, 251, 247, 0.85);
+  --theme-card-bg    : #FFFFFF;
+  --theme-input-bg   : #FFFFFF;
+  --theme-input-border : #E0E0E0;
 
   /* Typography (Fluid) */
   --font-display : 'Playfair Display', serif;
@@ -69,6 +81,35 @@
   padding: 0;
 }
 
+/* ==========================================================================
+   DARK MODE — Paleta Emocional Premium
+   Psicología del color: Carbones cálidos + violetas profundos + oro cobrizo
+   Transmite: lujo íntimo, relajación nocturna, exclusividad de spa.
+   ========================================================================== */
+[data-theme="dark"] {
+  /* Redefinición de tokens semánticos en modo oscuro */
+  --theme-bg-body    : #1C1820;   /* Carbón cálido con tinte violeta: intimidad */
+  --theme-bg-alt     : #241F2D;   /* Violeta muy oscuro: profundidad y misterio */
+  --theme-surface    : #2D2635;   /* Superficie elevada: separación sutil */
+  --theme-text       : #F0E8F4;   /* Blanco lavanda: más suave que el blanco puro */
+  --theme-text-soft  : #B8A8C8;   /* Malva claro: legibilidad elegante */
+  --theme-border     : #3D3350;   /* Violeta oscuro para bordes */
+  --theme-header-bg  : rgba(28, 24, 32, 0.92); /* Header oscuro translúcido */
+  --theme-card-bg    : #2A2335;   /* Tarjetas con tono violeta cálido */
+  --theme-input-bg   : #241F2D;
+  --theme-input-border : #4A3D5C;
+
+  /* Acentos dorados/cobrizos: contraste premium con el fondo oscuro */
+  --color-accent     : #D4A853;   /* Oro más cálido y luminoso en dark */
+  --color-primary    : #D4809A;   /* Rosa apagado-mauve: más elegante en oscuro */
+  --color-text       : #F0E8F4;
+  --color-text-soft  : #B8A8C8;
+  --color-white      : #F0E8F4;
+  --color-bg         : #1C1820;
+  --shadow-card      : 0 8px 40px rgba(0,0,0,0.45);
+  --shadow-soft      : 0 4px 24px rgba(212,168,83,0.12);
+}
+
 html {
   scroll-behavior: smooth; /* Enhances smooth scroll for anchor links */
   cursor: url('../images/heart-cursor.svg') 16 8, auto;
@@ -77,7 +118,7 @@ html {
 body {
   font-family: var(--font-body);
   font-size: var(--fs-base);
-  color: var(--color-text);
+  color: var(--theme-text);
   background: linear-gradient(-45deg, #FDFBF7, #f7cddb, #FDFBF7, #f2a7bb);
   background-size: 300% 300%;
   background-attachment: fixed;
@@ -85,6 +126,23 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  /* Transición suave al cambiar de tema */
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Fondo dinámico en Dark Mode */
+[data-theme="dark"] body {
+  background: linear-gradient(-45deg, #1C1820, #241F2D, #2D2635, #1A1522);
+  background-size: 300% 300%;
+  background-attachment: fixed;
+  animation: gradientFlowDark 20s ease infinite;
+  color: var(--theme-text);
+}
+
+@keyframes gradientFlowDark {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes gradientFlow {
@@ -149,7 +207,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   line-height: 1.2;
   margin-bottom: var(--space-sm);
-  color: var(--color-text);
+  color: var(--theme-text);
 }
 
 h1 { font-size: var(--fs-hero); }
@@ -159,7 +217,7 @@ h4 { font-size: var(--fs-xl); }
 
 p {
   margin-bottom: var(--space-md);
-  color: var(--color-text-soft);
+  color: var(--theme-text-soft);
 }
 
 .text-accent {
@@ -231,7 +289,7 @@ p {
 }
 
 .header.scrolled {
-  background: rgba(253, 251, 247, 0.85);
+  background: var(--theme-header-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-soft);
@@ -274,11 +332,76 @@ p {
   z-index: 1001;
 }
 
+/* ─── Dark Mode Theme Toggle Button ─── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid var(--theme-border);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: rotate(20deg) scale(1.1);
+}
+
+.theme-toggle__icon {
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: absolute;
+}
+
+/* Sol: visible en modo claro */
+.theme-toggle__icon--sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+  color: var(--color-accent);
+}
+
+/* Luna: oculta en modo claro */
+.theme-toggle__icon--moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+  color: var(--theme-text);
+}
+
+/* En modo oscuro: invertir */
+[data-theme="dark"] .theme-toggle__icon--sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+[data-theme="dark"] .theme-toggle__icon--moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+[data-theme="dark"] .theme-toggle {
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+/* ─────────────────────────────────────── */
+
 .hamburger {
   display: block;
   width: 24px;
   height: 2px;
-  background-color: var(--color-text);
+  background-color: var(--theme-text);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -292,7 +415,7 @@ p {
   position: absolute;
   width: 24px;
   height: 2px;
-  background-color: var(--color-text);
+  background-color: var(--theme-text);
   transition: var(--transition);
 }
 
@@ -338,8 +461,8 @@ p {
 }
 
 .btn--secondary {
-  background-color: var(--color-white);
-  color: var(--color-text);
+  background-color: var(--theme-surface);
+  color: var(--theme-text);
   box-shadow: var(--shadow-soft);
 }
 .btn--secondary:hover {
@@ -980,7 +1103,7 @@ p {
 }
 
 .form {
-  background-color: var(--color-bg);
+  background-color: var(--theme-surface);
   padding: var(--space-lg);
   border-radius: var(--radius-md);
 }
@@ -1001,14 +1124,19 @@ p {
   color: var(--color-text);
 }
 
+.form__group label {
+  color: var(--theme-text);
+}
+
 .form__group input,
 .form__group select,
 .form__group textarea {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid #E0E0E0;
+  border: 1px solid var(--theme-input-border);
   border-radius: var(--radius-sm);
-  background-color: var(--color-white);
+  background-color: var(--theme-input-bg);
+  color: var(--theme-text);
   transition: var(--transition);
 }
 
@@ -1154,15 +1282,13 @@ p {
   transform: scale(1);
 }
 
-/* Back to Top */
+/* Back to Top — con anillo de progreso de scroll */
 .back-to-top {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 48px;
-  height: 48px;
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1172,8 +1298,9 @@ p {
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
-  transition: var(--transition);
-  box-shadow: var(--shadow-card);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  background: transparent;
+  padding: 0;
 }
 
 .back-to-top.visible {
@@ -1182,8 +1309,73 @@ p {
   transform: translateY(0);
 }
 
-.back-to-top:hover {
-  background-color: var(--color-dark);
+.back-to-top:hover .back-to-top__arrow {
+  background-color: var(--color-accent);
+}
+
+.back-to-top:hover .progress-ring__track {
+  stroke: var(--color-accent);
+}
+
+/* SVG del anillo de progreso (contenedor externo) */
+.progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* Empieza desde las 12 en punto */
+  pointer-events: none;
+}
+
+/* Pista de fondo del anillo */
+.progress-ring__bg {
+  fill: none;
+  stroke: rgba(242,167,187,0.2);
+  stroke-width: 3;
+}
+
+/* Pista de progreso activa */
+.progress-ring__track {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  /* stroke-dasharray y stroke-dashoffset se calculan desde JS */
+  transition: stroke-dashoffset 0.15s linear, stroke 0.3s ease;
+}
+
+[data-theme="dark"] .progress-ring__track {
+  stroke: var(--color-accent);
+}
+
+[data-theme="dark"] .progress-ring__bg {
+  stroke: rgba(212,168,83,0.15);
+}
+
+/* Círculo de fondo del botón (la pastilla interior) */
+.back-to-top__arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  box-shadow: var(--shadow-soft);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+[data-theme="dark"] .back-to-top__arrow {
+  background-color: var(--color-accent);
+  color: #1C1820;
+}
+
+.back-to-top:hover .back-to-top__arrow {
+  transform: scale(1.1);
 }
 
 /* ==========================================================================

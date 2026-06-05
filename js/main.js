@@ -1,4 +1,4 @@
-/**
+﻿/**
  * NAXASNAILS - MAIN JAVASCRIPT
  * Vanilla JS Implementation for UI interactions
  */
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     whatsappLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const message = link.getAttribute('data-message') || 'Hola! Quisiera más información.';
+            const message = link.getAttribute('data-message') || 'Hola! Quisiera mÃ¡s informaciÃ³n.';
             const url = buildWhatsAppURL(phoneNumber, message);
             window.open(url, '_blank', 'noopener,noreferrer');
         });
@@ -362,5 +362,85 @@ document.addEventListener('DOMContentLoaded', () => {
             // Optional: reset form
             contactForm.reset();
         });
+    }
+
+    // =========================================================================
+    // 10. DARK MODE TOGGLE - Premium Emocional
+    // Detecta preferencia del SO, guarda en localStorage, anima transicion suave
+    // =========================================================================
+    const htmlEl      = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+
+    const applyTheme = (theme) => {
+        htmlEl.setAttribute('data-theme', theme);
+        if (themeToggle) {
+            const isDark = theme === 'dark';
+            themeToggle.setAttribute('aria-pressed', String(isDark));
+            themeToggle.setAttribute(
+                'aria-label',
+                isDark ? 'Activar modo claro' : 'Activar modo oscuro'
+            );
+        }
+    };
+
+    const getSavedTheme = () => {
+        const saved = localStorage.getItem('naxasnails-theme');
+        if (saved !== null) return saved;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : '';
+    };
+
+    applyTheme(getSavedTheme());
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (localStorage.getItem('naxasnails-theme') === null) {
+            applyTheme(e.matches ? 'dark' : '');
+        }
+    });
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? '' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('naxasnails-theme', newTheme);
+        });
+    }
+
+    // =========================================================================
+    // 11. BOTON "VOLVER ARRIBA" con ANILLO DE PROGRESO DE SCROLL
+    // Usa requestAnimationFrame para maxima performance (sin layout thrashing).
+    // Circunferencia del anillo r=25: 2 * PI * 25 aprox 157.08
+    // =========================================================================
+    const progressTrack = document.getElementById('progress-ring-track');
+
+    if (progressTrack) {
+        const RADIUS        = 25;
+        const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+        progressTrack.style.strokeDasharray  = CIRCUMFERENCE;
+        progressTrack.style.strokeDashoffset = CIRCUMFERENCE;
+
+        let ticking = false;
+
+        const updateProgressRing = () => {
+            const scrollTop    = window.scrollY || document.documentElement.scrollTop;
+            const docHeight    = document.documentElement.scrollHeight;
+            const windowHeight = window.innerHeight;
+            const scrollable   = docHeight - windowHeight;
+
+            const progress = scrollable > 0 ? Math.min(scrollTop / scrollable, 1) : 0;
+            progressTrack.style.strokeDashoffset = CIRCUMFERENCE * (1 - progress);
+
+            ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateProgressRing);
+                ticking = true;
+            }
+        }, { passive: true });
+
+        updateProgressRing();
     }
 });

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,6 +68,32 @@
                 </ul>
                 <a href="#" class="btn btn--primary nav__cta js-whatsapp-link" data-message="Hola Naxasnails! Quisiera consultar disponibilidad y agendar una cita.">Reservar Cita</a>
             </nav>
+
+            <!-- Botón Toggle Modo Oscuro -->
+            <button
+                id="theme-toggle"
+                class="theme-toggle"
+                aria-label="Activar modo oscuro"
+                aria-pressed="false"
+                title="Cambiar entre modo claro y oscuro"
+            >
+                <!-- Ícono Sol (modo claro activo) -->
+                <svg class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <!-- Ícono Luna (modo oscuro activo) -->
+                <svg class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
         </div>
     </header>
 
@@ -602,9 +628,24 @@
         </div>
     </footer>
 
-    <!-- Botón Scroll to Top -->
-    <button id="back-to-top" class="back-to-top" aria-label="Volver arriba">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+    <!-- Botón Scroll to Top con Anillo de Progreso -->
+    <button
+        id="back-to-top"
+        class="back-to-top"
+        aria-label="Volver al inicio de la página"
+        title="Volver arriba"
+    >
+        <!-- Anillo SVG de progreso de lectura -->
+        <svg class="progress-ring" aria-hidden="true" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pista de fondo -->
+            <circle class="progress-ring__bg" cx="28" cy="28" r="25"/>
+            <!-- Pista de progreso (animada por JS) -->
+            <circle class="progress-ring__track" id="progress-ring-track" cx="28" cy="28" r="25"/>
+        </svg>
+        <!-- Círculo interior con la flecha -->
+        <span class="back-to-top__arrow" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+        </span>
     </button>
 
     <!-- Modal Lightbox Galería -->
