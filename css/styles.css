@@ -1310,11 +1310,11 @@ p {
 }
 
 .back-to-top:hover .back-to-top__arrow {
-  background-color: var(--color-accent);
+  background-color: #c4184d; /* Rosa más oscuro al hover */
 }
 
 .back-to-top:hover .progress-ring__track {
-  stroke: var(--color-accent);
+  stroke: #c4184d;
 }
 
 /* SVG del anillo de progreso (contenedor externo) */
@@ -1328,50 +1328,72 @@ p {
   pointer-events: none;
 }
 
-/* Pista de fondo del anillo */
+/* Pista de fondo del anillo — modo claro */
 .progress-ring__bg {
   fill: none;
-  stroke: rgba(242,167,187,0.2);
+  stroke: rgba(190, 80, 110, 0.18);
   stroke-width: 3;
 }
 
-/* Pista de progreso activa */
+/* Pista de progreso activa — modo claro */
 .progress-ring__track {
   fill: none;
-  stroke: var(--color-primary);
-  stroke-width: 3;
+  stroke: #C05878;            /* Rosa malva suave: visible sin ser intenso */
+  stroke-width: 3.5;
   stroke-linecap: round;
   /* stroke-dasharray y stroke-dashoffset se calculan desde JS */
   transition: stroke-dashoffset 0.15s linear, stroke 0.3s ease;
 }
 
+/* Modo oscuro: anillo NEON — color más moderado sin perder presencia */
 [data-theme="dark"] .progress-ring__track {
-  stroke: var(--color-accent);
+  stroke: #E0557A;            /* Rosa neón suavizado */
 }
 
 [data-theme="dark"] .progress-ring__bg {
-  stroke: rgba(212,168,83,0.15);
+  stroke: rgba(224, 85, 122, 0.12);
 }
 
-/* Círculo de fondo del botón (la pastilla interior) */
+/* Círculo interior con la flecha — modo claro */
 .back-to-top__arrow {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background-color: #C05878;  /* Rosa malva suave */
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
-  box-shadow: var(--shadow-soft);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(192, 88, 120, 0.35);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Modo oscuro: botón con resplandor suave */
 [data-theme="dark"] .back-to-top__arrow {
-  background-color: var(--color-accent);
-  color: #1C1820;
+  background-color: #E0557A;  /* Rosa neón suavizado */
+  color: #FFFFFF;
+  box-shadow:
+    0 0 6px  rgba(224, 85, 122, 0.7),
+    0 0 14px rgba(224, 85, 122, 0.4),
+    0 0 28px rgba(224, 85, 122, 0.2);
+  animation: neonPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 5px  rgba(224, 85, 122, 0.6),
+      0 0 12px rgba(224, 85, 122, 0.35),
+      0 0 24px rgba(224, 85, 122, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 8px  rgba(224, 85, 122, 0.85),
+      0 0 20px rgba(224, 85, 122, 0.55),
+      0 0 38px rgba(224, 85, 122, 0.3);
+  }
 }
 
 .back-to-top:hover .back-to-top__arrow {
